@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: url('https://img12.pixhost.to/images/1593/586788439_fr3hosting.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+    </style>
+</head>
+<body>
+  <form id="loginForm">
+    <h2>Login</h2>
+    <label>Username:</label><br>
+    <input type="text" id="username" required><br>
+
+    <label>Password:</label><br>
+    <input type="password" id="password" required><br><br>
+
+    <div id="errorMsg" style="color:red;"></div>
+    <button type="submit">Login</button>
+    <button onclick="window.location.href='file.html'">Daftar</button>
+  </form>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      fetch('cek_login.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      })
+      .then(response => response.text())
+      .then(result => {
+        if (result === 'sukses') {
+          alert("Login berhasil!");
+          // window.location.href = "dashboard.html";
+        } else {
+          document.getElementById("errorMsg").textContent = result;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

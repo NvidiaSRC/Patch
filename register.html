@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Halaman Register</title>
+    <link rel="stylesheet" href="style.css">
+     <style>
+    body {
+      background: url('https://img12.pixhost.to/images/1593/586788439_fr3hosting.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+    </style>
+</head>
+<body>
+
+  <form id="registerForm">
+  	  <h2>Formulir Pendaftaran</h2>
+    <label>Username:</label><br>
+    <input type="text" id="username" required><br>
+
+    <label>Password:</label><br>
+    <input type="password" id="password" required><br>
+
+    <label>Kode Undangan:</label><br>
+    <input type="text" id="code" required><br><br>
+
+    <div id="errorMsg" style="color:red;"></div>
+    <button type="submit">Daftar</button>
+  </form>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const allowedCode = "nvidia009";
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const code = document.getElementById("code").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (code !== allowedCode) {
+        errorMsg.textContent = "Kode undangan salah!";
+        return;
+      }
+
+      fetch('simpan_user.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      })
+      .then(response => response.text())
+      .then(result => {
+        if (result === 'sukses') {
+          alert("Pendaftaran berhasil! Arahkan ke halaman login...");
+          window.location.href = "index.html";
+        } else {
+          errorMsg.textContent = result;
+        }
+      })
+      .catch(err => {
+        errorMsg.textContent = "Terjadi kesalahan saat mendaftar.";
+      });
+    });
+  </script>
+</body>
+</html>
